@@ -20,5 +20,9 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-- publish: $(System.DefaultWorkingDirectory)/azure-pipelines.yaml
-  artifact: azure-pipelines
+- task: PublishPipelineArtifact@2
+  inputs:
+    targetPath: '$(Pipeline.Workspace)'
+    artifactName: 'appstash-app'
+    artifactType: 'filepath'
+    fileSharePath: 'dominikrose-leanix/appstash-service-user/azure-pipelines.yml'
