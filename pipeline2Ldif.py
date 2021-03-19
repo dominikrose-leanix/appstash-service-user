@@ -73,7 +73,7 @@ def pipeline2ldif():
                 "id": "run_" + runs_item['name'],
                 "data": {
                     'state': runs_item['state'],
-                    'result': runs_item['result'],
+#                     'result': runs_item['result'],
                     'date': runs_item['finishedDate'],
                     "deployment": runs_item['pipeline']['name']
                 }
