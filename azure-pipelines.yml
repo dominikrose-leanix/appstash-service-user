@@ -20,9 +20,7 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
-- task: PublishPipelineArtifact@2
+- task: PythonScript@0
   inputs:
-    targetPath: '$(Pipeline.Workspace)'
-    artifactName: 'appstash-app'
-    artifactType: 'filepath'
-    fileSharePath: 'dominikrose-leanix/appstash-service-user/azure-pipelines.yml'
+    scriptSource: 'filePath'
+    scriptPath: 'https://raw.githubusercontent.com/dominikrose-leanix/appstash-service-user/master/azure-pipelines.yml'
