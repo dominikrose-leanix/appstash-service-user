@@ -23,4 +23,4 @@ steps:
 - task: PythonScript@0
   inputs:
     scriptSource: 'filePath'
-    scriptPath: 'https://raw.githubusercontent.com/dominikrose-leanix/appstash-service-user/master/azure-pipelines.yml'
+    scriptPath: '$(Build.SourcesDirectory)/azure-pipelines.yml'
