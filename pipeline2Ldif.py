@@ -60,43 +60,44 @@ for pipelineItem in pipelineList['value']:
         '/_apis/pipelines/' + addPipeLineId + '/runs?api-version=6.0-preview.1'
     runsResponse = requests.get(runsURL, auth=auth)
     runsJSON = runsResponse.json()
+    print(json.dumps(runsJSON, indent=2))
 
     # Add individual run to metrics
-    for runsItem in runsJSON['value']:
-        runsList.append({
-            "type": "Run",
-            "id": "run_" + runsItem['name'],
-            "data": {
-                'state': runsItem['state'],
-                'result': runsItem['result'],
-                'date': runsItem['finishedDate'],
-                "deployment": runsItem['pipeline']['name']
-            }
-        })
+#     for runsItem in runsJSON['value']:
+#         runsList.append({
+#             "type": "Run",
+#             "id": "run_" + runsItem['name'],
+#             "data": {
+#                 'state': runsItem['state'],
+#                 'result': runsItem['result'],
+#                 'date': runsItem['finishedDate'],
+#                 "deployment": runsItem['pipeline']['name']
+#             }
+#         })
 
-    responseJSON = json.loads(response.content)
-    # print(json.dumps(responseJSON, indent=2))
-    # print(responseJSON['configuration']['path'])
-    # pipelineLDIFObjects = {"content": responseJSON['configuration']['path']}
-    pipelineConfigs.append({
-        "type": "Configuration",
-        "id": responseJSON['name'],
-        "data": {
-            'url': responseJSON['_links']['web']['href'],
-            'name': responseJSON['configuration']['repository']['fullName'],
-            'runs': runsList
-        }
-    })
+#     responseJSON = json.loads(response.content)
+#     # print(json.dumps(responseJSON, indent=2))
+#     # print(responseJSON['configuration']['path'])
+#     # pipelineLDIFObjects = {"content": responseJSON['configuration']['path']}
+#     pipelineConfigs.append({
+#         "type": "Configuration",
+#         "id": responseJSON['name'],
+#         "data": {
+#             'url': responseJSON['_links']['web']['href'],
+#             'name': responseJSON['configuration']['repository']['fullName'],
+#             'runs': runsList
+#         }
+#     })
 
-# print(json.dumps(pipelineConfigs, indent=2))
-# ldif['content'] =
-ldif = {
-    "connectorType": "azure-devops-pipelines-connector",
-    "connectorId": "azure-devops-pipelines-connector",
-    "connectorVersion": "1.0",
-    "processingMode": "full",
-    "lxVersion": "1.0.0",
-    "lxWorkspace": workspace,
-    "description": "Azure DevOps Connector",
-    "content": pipelineConfigs}
-print(json.dumps(ldif, indent=2))
+# # print(json.dumps(pipelineConfigs, indent=2))
+# # ldif['content'] =
+# ldif = {
+#     "connectorType": "azure-devops-pipelines-connector",
+#     "connectorId": "azure-devops-pipelines-connector",
+#     "connectorVersion": "1.0",
+#     "processingMode": "full",
+#     "lxVersion": "1.0.0",
+#     "lxWorkspace": workspace,
+#     "description": "Azure DevOps Connector",
+#     "content": pipelineConfigs}
+# # print(json.dumps(ldif, indent=2))
