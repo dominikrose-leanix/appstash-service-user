@@ -105,3 +105,7 @@ def pipeline2ldif():
         "description": "Azure DevOps Connector",
         "content": pipeline_configs}
     print(json.dumps(ldif, indent=2))
+
+
+# Initiate script    
+pipeline2ldif()    
