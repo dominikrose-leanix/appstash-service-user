@@ -23,4 +23,4 @@ steps:
 - task: PythonScript@0
   inputs:
     scriptSource: 'filePath'
-    scriptPath: '$(Build.SourcesDirectory)/azure-pipelines.yml'
+    scriptPath: '$(Build.SourcesDirectory)/pipeline2Ldif.py'
