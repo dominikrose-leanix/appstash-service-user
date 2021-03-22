@@ -1,17 +1,25 @@
 import json
 import requests
+import os
 from requests.auth import HTTPBasicAuth
+
+# ENV VARS
+ADO_AUTH = os.getenv('ADO_AUTH')
+ADO_ORGANIZATION = os.getenv('ADO_ORGANIZATION')
+ADO_PROJECT = os.getenv('ADO_PROJECT')
+WORKSPACE_ID = os.getenv('WORKSPACE_ID')
 
 
 def pipeline2ldif():
-    workspace = "1a84105f-5e80-468d-bc82-311338999016"
+    workspace = WORKSPACE_ID
 
-    ado_organization = 'leanixcnstest'    # The name of the Azure DevOps Organization
+    # The name of the Azure DevOps Organization
+    ado_organization = ADO_ORGANIZATION
     # The name of the Azure DevOps Project (can be the name or the ID)
-    add_project = 'Test'
+    add_project = ADO_PROJECT
 
     auth = HTTPBasicAuth(
-        '', 'fkvbddslrmrqflmpui76l5huybhk5yu7nwoqgxh7tz23bobq7b3q')
+        '', ADO_AUTH)
 
     request_url = 'https://dev.azure.com/' + ado_organization + '/' + add_project + \
         '/_apis/pipelines?api-version=6.0-preview.1'  # Reques to get a full list of available pipelines
@@ -68,7 +76,6 @@ def pipeline2ldif():
 
         # Add individual run to metrics
         for runs_item in runs_json['value']:
-            print(runs_item)
             if runs_item['state'] == 'completed':
                 runs_list.append({
                     "type": "Run",
@@ -80,12 +87,10 @@ def pipeline2ldif():
                         "deployment": runs_item['pipeline']['name']
                     }
                 })
-            
 
         response_json = json.loads(response.content)
-        # print(json.dumps(response_json, indent=2))
-        # print(response_json['configuration']['path'])
-        # pipelineLDIFObjects = {"content": response_json['configuration']['path']}
+
+        # Add Config fact sheet with history of runs
         pipeline_configs.append({
             "type": "Configuration",
             "id": response_json['name'],
@@ -95,9 +100,21 @@ def pipeline2ldif():
                 'runs': runs_list
             }
         })
+        # To add further fact sheets in the future
+        # pipeline_configs.append({
+        #     "type": "Fact Sheet Type - mandatory field",
+        #     "id": <<Delineate your required ID here - mandatory field>>,
+        #     "data": {
+        #         'exampleList': [
+        #           {<<Add list item 1 here>>},
+        #           {<<Add list item 2 here>>},
+        #         ],
+        #         'name': <<This shows that you can have any item in data section>>
+        #     }
+        # })
 
-    # print(json.dumps(pipeline_configs, indent=2))
-    # ldif['content'] =
+    # Add up findings from each API to create LDIF
+
     ldif = {
         "connectorType": "azure-devops-pipelines-connector",
         "connectorId": "azure-devops-pipelines-connector",
@@ -110,5 +127,5 @@ def pipeline2ldif():
     print(json.dumps(ldif, indent=2))
 
 
-# Initiate script    
-pipeline2ldif()    
+# Initiate script
+pipeline2ldif()
