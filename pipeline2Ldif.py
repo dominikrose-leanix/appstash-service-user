@@ -69,16 +69,17 @@ def pipeline2ldif():
         # Add individual run to metrics
         for runs_item in runs_json['value']:
             print(runs_item)
-            runs_list.append({
-                "type": "Run",
-                "id": "run_" + runs_item['name'],
-                "data": {
-                    'state': runs_item['state'],
-#                     'result': runs_item['result'],
-#                     'date': runs_item['finishedDate'],
-#                     "deployment": runs_item['pipeline']['name']
-                }
-            })
+            if runs_item['state'] == 'completed':
+                runs_list.append({
+                    "type": "Run",
+                    "id": "run_" + runs_item['name'],
+                    "data": {
+                        'state': runs_item['state'],
+                        'result': runs_item['result'],
+                        'date': runs_item['finishedDate'],
+                        "deployment": runs_item['pipeline']['name']
+                    }
+                })
             
 
         response_json = json.loads(response.content)
@@ -106,7 +107,7 @@ def pipeline2ldif():
         "lxWorkspace": workspace,
         "description": "Azure DevOps Connector",
         "content": pipeline_configs}
-#     print(json.dumps(ldif, indent=2))
+    print(json.dumps(ldif, indent=2))
 
 
 # Initiate script    
